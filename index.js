@@ -257,6 +257,13 @@ function somme(...numbers) {
   return s;
 };
 
+// Exemple avec reduce (pour voir un autre algo...)
+function somme2(...numbers) {
+  return numbers.reduce(function(total, currentNumber) {
+    return total + currentNumber;
+  }, 0);
+}
+
 // console.log(
 //   somme(1, 2, 5),
 //   somme(1, 2, 5, 6, 9, 10)
@@ -267,13 +274,7 @@ function f(param1, param2, ...restOfParam) {
 }
 
 // Affichera 1, 2 et [3, 4, 5]
-f(1, 2, 3, 4, 5); 
-
-/**
- * Opérateur de dispersion (spread)
- */
-
-// On verra au prochain cours cette partie en détail
+// f(1, 2, 3, 4, 5); 
 
 /**
  * Fonctions fléchées
@@ -321,7 +322,108 @@ function makeCoordinateObject2(x, y) {
 }
 
 /**
+ * syntaxe de dispersion (spread)
+ */
+
+// Il est possible de "disperser" le contenu d'objets ou de tableaux
+// dans de nouveaux objets ou tableaux avec l'opérateur de diffusion ... (oui le même que l'opérateur de reste)
+
+let users = ["userA", "userB", "userC"];
+
+// Fusionner des tableaux avec la méthode concat (avant l'syntaxe de dispersion)
+let newUsers = ["userD"].concat(users, ['userE', 'userF']);
+
+// Fusionner des tableaux avec l'syntaxe de dispersion
+newUsers = [
+  "userD",
+  ...users,
+  "userE",
+  "userF",
+]
+
+// Cela fonctionne aussi avec les obets
+let voiture = {
+  marque: "Peugeot",
+  modele: "508",
+  couleur: "Blanche",
+}
+
+// Un exemple avec la méthode Object.assign (avant syntaxe de dispersion)
+let voiture2 = Object.assign({}, voiture, { annee: 2020, couleur: "Noir" })
+
+// Fusionner des objets avec l'syntaxe de dispersion
+voiture2 = {
+  couleur: "Rose", // Cette clé va se faire écraser par "couleur: Blanche" de voiture, puis couleur: "Noir"
+  ...voiture,
+  annee: 2020,
+  couleur: "Noir", // Ecrasement de clé, la valeur de couleur dans l'objet sera "Noir"
+}
+
+// console.log(voiture2)
+
+const sum = (n1, n2) => n1 + n2;
+const nombres = [1, 4, 7, 9];
+
+// Sans syntaxe de dispersion
+sum(nombres[0], nombres[1]);
+
+// Avec syntaxe de dispersion
+// C'est comme si nous faisions sum(1, 4)
+// La fonction actuelle n'ayant que 2 paramètres, en l'état de définition de la dite fonction,
+// On aura accès qu'aux deux premiers nombres du tableaux
+sum(...nombres) // 1 + 4
+
+/**
  * Les modules (import/export)
  */
 
-// On verra au prochain cours cette partie en détail
+//
+// Vous devez mettre l'extension du fichier
+// Mais dans d'autres contextes (Typescript, React, utilisation d'un bundler comme Vite, Webpack, etc.)
+// Il n'est pas forcément nécéssaire de mettre l'extension
+//
+// Le nom de votre import par défaut est arbitraire
+// import NomDuModule from CheminDuModule
+// L'import par défaut ne fonctionn que si il y un export par défaut dans le module
+import Calculatrice from "./modules/calculatrice.js";
+// Ici on fait des imports nommés
+// On choisi ce que l'on souhaite extraire de notre module
+//
+// Pour un export, si vous souhaitez renommé un membre de cet export
+// On utilise le mot-clé "as"
+import { somme as somme3, multiplication } from "./modules/calculatrice.js";
+
+// Dans le cas où je souhaite importer tous les membres d'un module
+// qui ont été exporté avec le mot-clé export (dans le cas où il n'y a pas eu d'export default)
+// On peut utiliser cette syntaxe
+import * as Calculatrice2 from "./modules/calculatrice.js";
+
+Calculatrice.somme(1, 2);
+
+somme3(1, 2);
+multiplication(1, 2);
+
+Calculatrice2.somme();
+
+import { increment, decrement, countValue } from "./modules/count.js";
+
+increment();
+increment();
+increment();
+
+decrement();
+
+// console.log(countValue());
+
+import CounterBuilder from "./modules/count2.js";
+
+const countA = CounterBuilder();
+const countB = CounterBuilder(3);
+
+countA.increment();
+countB.decrement();
+
+// console.log(
+//   countA.countValue(), // 1
+//   countB.countValue(), // 2
+// )
